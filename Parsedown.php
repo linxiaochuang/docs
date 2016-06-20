@@ -405,7 +405,7 @@ class Parsedown
 
             if (isset($matches[1]))
             {
-                $class = 'language-'.$matches[1];
+                $class = 'lang-'.$matches[1];
 
                 $Element['attributes'] = array(
                     'class' => $class,
@@ -869,6 +869,7 @@ class Parsedown
                 'element' => array(
                     'name' => 'table',
                     'handler' => 'elements',
+                    'attributes'=>['class'=>'table table-striped table-bordered']
                 ),
             );
 
@@ -1392,6 +1393,11 @@ class Parsedown
     protected function element(array $Element)
     {
         $markup = '<'.$Element['name'];
+        if(in_array($Element['name'],['h1','h2','h3'],true)){
+            $id=str_replace([' '],'-',trim($Element['text']));
+            $Element['attributes']['id']=$id;
+            $Element['text']="<a href=\"#$id\">$Element[text]</a>";
+        }
 
         if (isset($Element['attributes']))
         {
